@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCQ Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-image: url("background1.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  color: white;
+}
+
+.container {
+  max-width: 720px;
+  height: 540px;
+  margin: 140px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.15); 
+  border-radius: 18px;
+  backdrop-filter: blur(10px); 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+.options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.option-container {
+  width: calc(50% - 20px); 
+  margin-bottom: 19px;
+  padding: 10px 10px;
+  background-color: gray;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.option-container:hover {
+  background-color: black;
+  color:white;
+}
+
+#questionContainer {
+  padding: 10px;
+  margin-right:80px;
+  margin-left:80px;
+}
+
+.result {
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#timer {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+#submitButton {
+  display: block;
+  margin: 20px auto 0;
+  padding: 12px 24px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+}
+
+#submitButton:hover {
+  background-color: white;
+  color:black;  
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <center><h1>MCQ Quiz[JAVA SCRIPT]</h1></center>
+  <div id="questionContainer">
+    <h2 id="questionText"></h2>
+    <div class="options-container" id="optionsContainer">
+    </div>
+  </div>
+  <div id="resultContainer" class="hidden">
+    <div id="result" class="result"></div>
+  </div>
+  <div id="timer">Time Remaining: <span id="time">15</span> seconds</div>
+  <button id="submitButton" onclick="submitAnswer()">Submit</button>
+</div>
+
+<script>
+let totalScore = 0;
+let currentQuestionIndex = 0;
+let selectedAnswer = ''; 
+let timeLeft = 15; 
+let intervalId;
+
+const questions = [
+  {
+       question: "1.What is the purpose of the 'localStorage' object in JavaScript?",
+		  options: ["a. Stores data locally in the browser","b. Fetches data from a remote server", "c. Adds new elements to the DOM","d. None of the above"],
+		  answer: "a. Stores data locally in the browser"
+    },
+   {
+       question: "2.What is the purpose of the 'onclick' event in HTML?",
+		  options: ["a. Triggered when a form is submitted", "b. Triggered when a user clicks on an element","c. Triggered when the mouse moves over an element","d. None of the above"],
+		  answer: "b. Triggered when a user clicks on an element"
+    },
+ {
+		 question: "3.Which event occurs when a user moves the mouse over an element?",
+		  options: ["a. onclick","b. onmouseover", "c. onkeydown","d. onsubmit"],
+		  answer: "b. onmouseover"
+	},
+ {
+		 question: "4.In JavaScript, what does the 'typeof' operator return for a function?",
+		  options: ["a. function","b. object", "c. undefined","d. string"],
+		  answer: "a. function"
+	},
+	{
+		 question: "5.Which HTML tag is used for creating a hyperlink?",
+		  options: ["a. <link>","b. <a>","c. <href>","d. <hyperlink>"],
+		  answer: "b. <a>"
+	
+	},
+	{
+		 question: "6.What is the purpose of the HTML <head> tag?",
+		  options: ["a. Defines the main content of the webpage","b. Contains metadata and links to external resources", "c. Specifies the header section of the webpage","d. None of the above"],
+		  answer: "b. Contains metadata and links to external resources"
+	
+	},
+	{
+		
+		 question: "7.Which event is triggered when a user clicks on an HTML element?",
+		  options: ["a. onclick","b. onhover","c. onkeydown","d. onsubmit"],
+		  answer: "a. onclick"
+	
+	
+	},
+	{
+		 question: "8.What is the correct way to write an if statement in JavaScript?",
+		  options: ["a. if (condition) { code block }","b. if { condition } (code block)","c. (condition) { code block } if","d. (code block) if (condition)"],
+		  answer: "a. if (condition) { code block }"
+	
+	},
+	{
+		 question: "9.What does the === operator do in JavaScript?",
+		  options: ["a. Compares two values for equality, without type conversion", "b. Compares two values for equality, with type conversion","c. Assigns a value to a variable","d. None of the above"],
+		  answer: "a. Compares two values for equality, without type conversion"
+	
+	},
+	{
+		 question: "10.How do you declare a variable in JavaScript?",
+		  options: ["a. var myVar = 10;","b. let myVar = 10;","c. const myVar = 10;","d. All of the above"],
+		  answer: "d. All of the above"
+	
+	}
+];
+
+function loadQuestion() {
+  const currentQuestion = questions[currentQuestionIndex];
+  document.getElementById('questionText').textContent = currentQuestion.question;
+  const optionsContainer = document.getElementById('optionsContainer');
+  optionsContainer.innerHTML = ''; 
+  currentQuestion.options.forEach(option => {
+    const div = document.createElement('div');
+    div.textContent = option;
+    div.className = 'option-container';
+    div.onclick = function() {
+      selectedAnswer = option; 
+      highlightSelectedOption(div); 
+    };
+    optionsContainer.appendChild(div);
+  });
+
+ 
+  startTimer(timeLeft, document.getElementById('time'));
+}
+
+function highlightSelectedOption(selectedDiv) {
+  const optionContainers = document.querySelectorAll('.option-container');
+  optionContainers.forEach(container => {
+    container.classList.remove('selected');
+  });
+  selectedDiv.classList.add('selected');
+}
+
+function checkAnswer() {
+  const currentQuestion = questions[currentQuestionIndex];
+  if (selectedAnswer === currentQuestion.answer) {
+    totalScore++;
+  }
+}
+
+function displayResult() {
+  document.getElementById('questionContainer').classList.add('hidden');
+  const resultContainer = document.getElementById('resultContainer');
+  resultContainer.classList.remove('hidden');
+  const resultText = document.getElementById('result');
+  resultText.textContent = `Your total score is ${totalScore} out of ${questions.length}.`;
+}
+
+function startTimer(duration, display) {
+  let timer = duration;
+  intervalId = setInterval(function() {
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+
+    display.textContent = `${seconds < 10 ? '0' : ''}${seconds}`;
+
+    if (--timer < 0) {
+      clearInterval(intervalId); 
+      timer = 0;
+      checkAnswer();
+      displayResult();
+    }
+  }, 1000);
+}
+
+function submitAnswer() {
+  clearInterval(intervalId); 
+  checkAnswer(); 
+  currentQuestionIndex++; 
+  if (currentQuestionIndex < questions.length) {
+    loadQuestion(); 
+  } else {
+    
+    displayResult();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadQuestion();
+});
+</script>
+
+</body>
+</html>

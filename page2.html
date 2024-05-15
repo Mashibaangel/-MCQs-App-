@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCQ Quiz</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-image: url("background1.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+  color: white;
+}
+
+.container {
+  max-width: 720px;
+  height: 540px;
+  margin: 140px auto;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.15); 
+  border-radius: 18px;
+  backdrop-filter: blur(10px); 
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+.options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.option-container {
+  width: calc(50% - 20px); 
+  margin-bottom: 19px;
+  padding: 10px 10px;
+  background-color: gray;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+}
+
+.option-container:hover {
+  background-color: black;
+  color:white;
+}
+
+#questionContainer {
+  padding: 10px;
+  margin-right:80px;
+  margin-left:80px;
+}
+
+.result {
+  font-size: 24px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+#timer {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 20px;
+}
+
+#submitButton {
+  display: block;
+  margin: 20px auto 0;
+  padding: 12px 24px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: background-color 0.3s ease;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); 
+}
+
+#submitButton:hover {
+  background-color: white;
+color:black;  
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <center><h1>MCQ Quiz[CSS]</h1></center>
+  <div id="questionContainer">
+    <h2 id="questionText"></h2>
+    <div class="options-container" id="optionsContainer">
+    </div>
+  </div>
+  <div id="resultContainer" class="hidden">
+    <div id="result" class="result"></div>
+  </div>
+  <div id="timer">Time Remaining: <span id="time">15</span> seconds</div>
+  <button id="submitButton" onclick="submitAnswer()">Submit</button>
+</div>
+
+<script>
+let totalScore = 0;
+let currentQuestionIndex = 0;
+let selectedAnswer = ''; 
+let timeLeft = 15; 
+let intervalId;
+
+const questions = [
+{
+        question: "1.What does the abbreviation CSS stand for?",
+        options: ["a.Cascading Style Sheets", "b.Colorful Style Sheets", 
+        "c.Creative Style Sheets", "d.Computer Style Sheets"],
+        answer: "a.Cascading Style Sheets"
+    },
+    {
+        question: "2.Which property is used to change the text color in CSS?",
+        options: ["a.text-color", "b.color", "c.font-color", "d.text-style"],
+        answer: "b.color"
+    },
+ {
+		 question: "3.Which of the following is not a valid CSS selector?",
+		  options: ["a. .class-name","b. #id-name","c. element-name","d. $variable-name"],
+		  answer: "d. $variable-name"
+	
+	},
+ {
+		 question: "4.What does the 'display: none;' CSS property do?",
+		  options: ["a. Hides the element without affecting the layout","b. Removes the element from the DOM","c. Makes the element transparent","d. None of the above"],
+		  answer: "a. Hides the element without affecting the layout"
+	
+	},
+	{
+		 question: "5.What does the CSS property 'float: left;' do?",
+		  options: ["a. Moves the element to the left of its container","b. Floats the element to the right side","c. Centers the element horizontally","d. None of the above"],
+		  answer: "a. Moves the element to the left of its container"
+	
+	},
+	{
+		 question: "6.Which CSS property is used for setting the font size of an element?",
+		  options: ["a. font-style","b. text-size", "c. font-size","d. text-style"],
+		  answer: "c. font-size"
+	
+	},
+	{
+		 question: "7.What is the purpose of the 'border-radius' CSS property?",
+		  options: ["a. Adds a border to the element","b. Rounds the corners of the element","c. Changes the background color of the element","d. None of the above"],
+		  answer: "b. Rounds the corners of the element"
+	
+	},
+	{
+		 question: "8.What does the CSS property 'position: absolute;' do?",
+		  options: ["a. Positions the element relative to its normal position", "b. Centers the element horizontally","c. Removes the element from the normal flow","d. None of the above"],
+		  answer: "c. Removes the element from the normal flow"
+	
+	},
+	{
+		 question: "9.How do you center-align text in CSS?",
+		  options: ["a. text-align: center;","b. align-text: center;","c. center-text: true;","d. align: center;"],
+		  answer: "a. text-align: center;"
+	
+	},
+	{
+		 question: "10.Which HTML tag is used to create a line break?",
+		  options: ["a. <br>","b. <lb>", "c. <break>","d. <line>"],
+		  answer: "a. <br>"
+	
+	}
+];
+
+function loadQuestion() {
+  const currentQuestion = questions[currentQuestionIndex];
+  document.getElementById('questionText').textContent = currentQuestion.question;
+  const optionsContainer = document.getElementById('optionsContainer');
+  optionsContainer.innerHTML = ''; 
+  currentQuestion.options.forEach(option => {
+    const div = document.createElement('div');
+    div.textContent = option;
+    div.className = 'option-container';
+    div.onclick = function() {
+      selectedAnswer = option; 
+      highlightSelectedOption(div); 
+    };
+    optionsContainer.appendChild(div);
+  });
+
+ 
+  startTimer(timeLeft, document.getElementById('time'));
+}
+
+function highlightSelectedOption(selectedDiv) {
+  const optionContainers = document.querySelectorAll('.option-container');
+  optionContainers.forEach(container => {
+    container.classList.remove('selected');
+  });
+  selectedDiv.classList.add('selected');
+}
+
+function checkAnswer() {
+  const currentQuestion = questions[currentQuestionIndex];
+  if (selectedAnswer === currentQuestion.correctAnswer) {
+    totalScore++;
+  }
+}
+
+function displayResult() {
+  document.getElementById('questionContainer').classList.add('hidden');
+  const resultContainer = document.getElementById('resultContainer');
+  resultContainer.classList.remove('hidden');
+  const resultText = document.getElementById('result');
+  resultText.textContent = `Your total score is ${totalScore} out of ${questions.length}.`;
+}
+
+function startTimer(duration, display) {
+  let timer = duration;
+  intervalId = setInterval(function() {
+    const minutes = Math.floor(timer / 60);
+    const seconds = timer % 60;
+
+    display.textContent = `${seconds < 10 ? '0' : ''}${seconds}`;
+
+    if (--timer < 0) {
+      clearInterval(intervalId); 
+      timer = 0;
+      checkAnswer();
+      displayResult();
+    }
+  }, 1000);
+}
+
+function submitAnswer() {
+  clearInterval(intervalId); 
+  checkAnswer(); 
+  currentQuestionIndex++; 
+  if (currentQuestionIndex < questions.length) {
+    loadQuestion(); 
+  } else {
+    
+    displayResult();
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadQuestion();
+});
+</script>
+
+</body>
+</html

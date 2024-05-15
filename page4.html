@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MCQs</title>
+<style>
+      body {
+        background-image: url("background1.jpg");
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        background-size: cover;
+        color: white;
+        padding: 10px;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        margin: 0;
+    }
+    .container {
+        width: 800px; 
+        height: 500px; 
+        margin: 100px auto; 
+        display: flex;
+        justify-content: space-between; 
+        align-items: center;
+       background: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 8px whitesmoke; 
+        padding: 20px;
+        border-radius: 8px;
+    }
+    .left-container {
+        width: 30%; 
+        margin-right: 10px; 
+        padding: 20px; 
+    }
+    .right-container {
+		height:200px;
+		border-left:5px solid black;
+
+        width: 60%; 
+        margin-left: 10px;
+		margin-top: 10px;		
+        padding: 24px; 
+    }
+	h1{
+		 text-align: center;
+        color: black;
+	}
+     h3 {
+        text-align: center;
+        color: black;
+    }
+    .quiz {
+        margin-bottom: 20px;
+		margin-top: 20px;
+		font-size:20px;
+    }
+    #question {
+        margin-bottom: 10px;
+        color: black; 
+        font-weight: bold;
+    }
+    input[type="checkbox"] {
+        margin-right: 10px;
+        transform: scale(1.5); 
+    }
+    label {
+        font-weight: bold;
+		color:black;		
+    }
+    #submit {
+        padding: 10px 20px;
+        background-color: black;
+        color: whitesmoke;
+        border: whitesmoke;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+		margin:30px 150px;
+        font-weight: bold; 
+    }
+    #submit:hover {
+        background-color: gray;
+		color:black
+    }
+    #result {
+        text-align: center;
+        font-weight: bold;
+		font-size:20px;
+        margin-top: 20px;
+        color: gold; 
+		padding:50px;
+		
+    }
+   #timer {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    margin-left: 90px;
+    margin-top: -10px;
+    box-shadow: 3px 3px 5px gray;
+    padding: 20px;
+    height: 10px; 
+    width: 50%;
+    border-radius: 5px;
+    background-color: black;
+    color: white;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="left-container">
+        <h1>Multiple Choice Question</h1>
+        <h3>Try to solve 30 MCQs in 60sec</h3>
+    </div>
+    <div class="right-container">
+        <div id="timer"></div>
+        <div id="quiz" class="quiz">
+            <div id="question">Question goes here</div>
+            <input type="checkbox" name="option" id="option1">
+            <label for="option1" id="label1"></label><br>
+             <input type="checkbox" name="option" id="option2">
+            <label for="option2" id="label2"></label><br>
+            <input type="checkbox" name="option" id="option3">
+            <label for="option3" id="label3"></label><br>
+            <input type="checkbox" name="option" id="option4">
+            <label for="option4" id="label4"></label><br>
+            <button id="submit">Submit</button>
+        </div>
+        <div id="result"></div>
+    </div>
+</div>
+
+<script>
+const quizData = [
+    {
+        question: "1.What does the abbreviation HTML stand for?",
+        options: ["a.Hyper Text Markup Language", "b.Hyperlinks and Text Markup Language",
+        "c.High Text Markup Language", "d.Hyper Tool Markup Language"],
+        answer: "a.Hyper Text Markup Language"
+    },
+    {
+        question: "2.What does the abbreviation CSS stand for?",
+        options: ["a.Cascading Style Sheets", "b.Colorful Style Sheets", 
+        "c.Creative Style Sheets", "d.Computer Style Sheets"],
+        answer: "a.Cascading Style Sheets"
+    },
+    {
+        question: "3.Which tag is used to define an unordered list in HTML?",
+        options: ["a.<ul>", "b.<li>", "c.<ol>", "d.<ul>"],
+        answer: "a.<ul>"
+    },
+    {
+        question: "4.Which property is used to change the text color in CSS?",
+        options: ["a.text-color", "b.color", "c.font-color", "d.text-style"],
+        answer: "b.color"
+    },
+    {
+        question: "5.Which of the following is a JavaScript data type?",
+        options: ["a.boolean", "b.decimal", "c.double", "d.string"],
+        answer: "a.boolean"
+    },
+	{
+		 question: "6.Which of the following is not a valid HTML element?",
+		  options: ["a. <div>","b. <span>","c. <section>","d. <header>"],
+		  answer: "d. <header>"
+	
+	},
+	{
+		 question: "7.Which of the following is not a valid CSS selector?",
+		  options: ["a. .class-name","b. #id-name","c. element-name","d. $variable-name"],
+		  answer: "d. $variable-name"
+	
+	},
+	{
+		 question: "8.How do you comment in JavaScript?",
+		  options: ["a. <!-- Comment -->","b. // Comment","c. /* Comment /","d. * Comment *"],
+		  answer: "c. /* Comment /"
+	
+	},
+	{
+		 question: "9.What is the correct way to include an external JavaScript file in HTML?",
+		  options: ["a. <script src=script.js>","b. <link rel=stylesheet href=script.js>","c. <script type=text/javascript src=script.js>","d. <script file=script.js>"],
+		  answer: "c. <script type=text/javascript src=script.js>"
+	
+	},
+	{
+		 question: "10.What does the === operator do in JavaScript?",
+		  options: ["a. Compares two values for equality, without type conversion", "b. Compares two values for equality, with type conversion","c. Assigns a value to a variable","d. None of the above"],
+		  answer: "a. Compares two values for equality, without type conversion"
+	
+	},
+	{
+		 question: "11.How do you declare a variable in JavaScript?",
+		  options: ["a. var myVar = 10;","b. let myVar = 10;","c. const myVar = 10;","d. All of the above"],
+		  answer: "d. All of the above"
+	
+	},
+	{
+		 question: "12.What is the correct way to write an if statement in JavaScript?",
+		  options: ["a. if (condition) { code block }","b. if { condition } (code block)","c. (condition) { code block } if","d. (code block) if (condition)"],
+		  answer: "a. if (condition) { code block }"
+	
+	},
+	{
+		 question: "13.What does the 'display: none;' CSS property do?",
+		  options: ["a. Hides the element without affecting the layout","b. Removes the element from the DOM","c. Makes the element transparent","d. None of the above"],
+		  answer: "a. Hides the element without affecting the layout"
+	
+	},
+	{
+		 question: "14.How do you add a comment in HTML?",
+		  options: ["a. <!-- Comment -->", "b. // Comment","c. /* Comment */","d. -- Comment --"],
+		  answer: "a. <!-- Comment -->"
+	
+	},
+	{
+		 question: "15.Which event is triggered when a user clicks on an HTML element?",
+		  options: ["a. onclick","b. onhover","c. onkeydown","d. onsubmit"],
+		  answer: "a. onclick"
+	
+	},
+	{
+		 question: "16.What does the CSS property 'float: left;' do?",
+		  options: ["a. Moves the element to the left of its container","b. Floats the element to the right side","c. Centers the element horizontally","d. None of the above"],
+		  answer: "a. Moves the element to the left of its container"
+	
+	},
+	{
+		 question: "17.Which HTML tag is used for creating a hyperlink?",
+		  options: ["a. <link>","b. <a>","c. <href>","d. <hyperlink>"],
+		  answer: "b. <a>"
+	
+	},
+	{
+		 question: "18.What is the purpose of the HTML <head> tag?",
+		  options: ["a. Defines the main content of the webpage","b. Contains metadata and links to external resources", "c. Specifies the header section of the webpage","d. None of the above"],
+		  answer: "b. Contains metadata and links to external resources"
+	
+	},
+	{
+		 question: "19.In JavaScript, what does the 'typeof' operator return for a function?",
+		  options: ["a. function","b. object", "c. undefined","d. string"],
+		  answer: "a. function"
+	
+	},
+	{
+		 question: "20.Which CSS property is used for setting the font size of an element?",
+		  options: ["a. font-style","b. text-size", "c. font-size","d. text-style"],
+		  answer: "c. font-size"
+	
+	},
+	{
+		 question: "21.What is the correct way to comment out multiple lines of code in JavaScript?",
+		  options: ["a. <!-- Comment -->","b. // Comment","c. /* Comment /","d. -- Comment --"],
+		  answer: "c. /* Comment /"
+	
+	},
+	{
+		 question: "22.Which HTML attribute is used to define inline styles?",
+		  options: ["a. style","b. css", "c. design","d.tags"],
+		  answer: "a. style"
+	
+	},
+	{
+		 question: "23.What is the purpose of the 'border-radius' CSS property?",
+		  options: ["a. Adds a border to the element","b. Rounds the corners of the element","c. Changes the background color of the element","d. None of the above"],
+		  answer: "b. Rounds the corners of the element"
+	
+	},
+	{
+		 question: "24.Which event occurs when a user moves the mouse over an element?",
+		  options: ["a. onclick","b. onmouseover", "c. onkeydown","d. onsubmit"],
+		  answer: "b. onmouseover"
+	
+	},
+	{
+		 question: "25.What does the CSS property 'position: absolute;' do?",
+		  options: ["a. Positions the element relative to its normal position", "b. Centers the element horizontally","c. Removes the element from the normal flow","d. None of the above"],
+		  answer: "c. Removes the element from the normal flow"
+	
+	},
+	{
+		 question: "26.What is the purpose of the 'onclick' event in HTML?",
+		  options: ["a. Triggered when a form is submitted", "b. Triggered when a user clicks on an element","c. Triggered when the mouse moves over an element","d. None of the above"],
+		  answer: "b. Triggered when a user clicks on an element"
+	
+	},
+	{
+		 question: "27.Which HTML tag is used to create a line break?",
+		  options: ["a. <br>","b. <lb>", "c. <break>","d. <line>"],
+		  answer: "a. <br>"
+	
+	},
+	{
+		 question: "28.What is the purpose of the 'localStorage' object in JavaScript?",
+		  options: ["a. Stores data locally in the browser","b. Fetches data from a remote server", "c. Adds new elements to the DOM","d. None of the above"],
+		  answer: "a. Stores data locally in the browser"
+	
+	},
+	{
+		 question: "29.Which HTML tag is used to define a table row?",
+		  options: ["a. <tr>","b. <row>","c. <table-row>","d. <tbl-row>"],
+		  answer: "a. <tr>"
+	
+	},
+	{
+		 question: "30.How do you center-align text in CSS?",
+		  options: ["a. text-align: center;","b. align-text: center;","c. center-text: true;","d. align: center;"],
+		  answer: "a. text-align: center;"
+	
+	}
+	
+   
+];
+
+const quizContainer = document.getElementById("quiz");
+const questionContainer = document.getElementById("question");
+const submitBtn = document.getElementById("submit");
+const resultContainer = document.getElementById("result");
+const timerDisplay = document.getElementById("timer");
+
+const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+const labels = document.querySelectorAll('label');
+
+let currentQuestion = 0;
+let score = 0;
+let timeLeft = 60; 
+let quizCompleted = false;
+
+function showQuestion() {
+    if (currentQuestion < quizData.length) {
+        const currentQuizData = quizData[currentQuestion];
+        questionContainer.textContent = currentQuizData.question;
+        for (let i = 0; i < checkboxes.length; i++) {
+            checkboxes[i].checked = false;
+            labels[i].textContent = currentQuizData.options[i];
+        }
+        currentQuestion++;
+    }
+
+    if (currentQuestion >= quizData.length) {
+        showResult();
+    }
+}
+
+function showResult() {
+    quizContainer.style.display = "none";
+    resultContainer.textContent = `You scored ${score} out of ${quizData.length}`;
+    resultContainer.style.display = "block";
+    quizCompleted = true; 
+}
+
+function checkAnswer() {
+    if (quizCompleted) {
+        return; 
+    }
+
+    const selectedOptions = document.querySelectorAll('input[type="checkbox"]:checked');
+    if (selectedOptions.length === 0) {
+        alert("Please select an option!");
+        return;
+    }
+
+    const selectedAnswers = Array.from(selectedOptions).map(option => option.nextElementSibling.textContent);
+    const correctAnswers = quizData[currentQuestion - 1].answer; 
+    if (selectedAnswers.includes(correctAnswers)) {
+        score++;
+    }
+
+    showQuestion();
+}
+
+function countdownTimer() {
+    const timerInterval = setInterval(() => {
+        if (quizCompleted) {
+            clearInterval(timerInterval); 
+            return;
+        }
+
+        timeLeft--;
+        timerDisplay.textContent = `Time Left: ${timeLeft} seconds`;
+
+        if (timeLeft === 0) {
+            clearInterval(timerInterval);
+            showResult();
+        }
+    }, 1000);
+}
+
+submitBtn.addEventListener("click", checkAnswer);
+
+countdownTimer();
+showQuestion();
+</script>
+</body>
+</html>
